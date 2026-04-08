@@ -19,7 +19,7 @@ Assuming you already have a tunnel running on your VM:
 3. Under the **Public Hostname** tab, add a new routing rule:
    - Subdomain: `demo-api` (or your choice)
    - Domain: `yourdomain.com`
-   - Service: `http://localhost:3000`
+   - Service: `http://localhost:3001`
 
 ### 2. Cloudflare Dashboard (Session Identifier)
 1. Go to **Security > API Shield > Settings**.
