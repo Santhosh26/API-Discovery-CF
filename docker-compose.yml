@@ -19,5 +19,5 @@ services:
         condition: service_healthy
     environment:
       - API_BASE_URL=https://demo-api.ksanthoshkumar.com
-      - BATCH_SIZE=100
+      - BATCH_SIZE=1500
       - INTERVAL_HOURS=4
