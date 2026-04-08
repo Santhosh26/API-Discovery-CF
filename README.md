@@ -4,36 +4,36 @@ A self-contained lab environment to test and observe Cloudflare's API Discovery 
 
 ## Architecture
 
-This project spins up 3 Docker containers:
+This project spins up 2 Docker containers:
 1. `api`: A Node.js Express REST API with 14 endpoints and in-memory seed data.
-2. `cloudflared`: Connects the API to Cloudflare's network via a secure tunnel.
-3. `traffic-gen`: A script that runs in a loop, hitting the API endpoints periodically to generate the traffic volume required for Cloudflare to discover them (>500 requests over 10 days).
+2. `traffic-gen`: A script that runs in a loop, hitting the API endpoints periodically to generate the traffic volume required for Cloudflare to discover them (>500 requests over 10 days).
+
+It relies on a host-level installation of `cloudflared` to proxy traffic from Cloudflare into the `api` container.
 
 ## Setup Instructions
 
-### 1. Cloudflare Dashboard
+### 1. Cloudflare Dashboard (Tunnel)
+Assuming you already have a tunnel running on your VM:
 1. Go to **Networking > Tunnels**.
-2. Click **Create Tunnel** and name it (e.g., `api-discovery-lab`).
-3. Copy the tunnel token.
-4. Add a Public Hostname:
+2. Click on your active tunnel and hit **Configure**.
+3. Under the **Public Hostname** tab, add a new routing rule:
    - Subdomain: `demo-api` (or your choice)
    - Domain: `yourdomain.com`
-   - Service: `http://api:3000`
-5. Go to **Security > API Shield > Settings**.
-6. Under Session identifiers, configure:
+   - Service: `http://localhost:3000`
+
+### 2. Cloudflare Dashboard (Session Identifier)
+1. Go to **Security > API Shield > Settings**.
+2. Under Session identifiers, configure:
    - Type: `HTTP Header`
    - Name: `Authorization`
 
-### 2. Deploy the Lab
+### 3. Deploy the Lab
 On your VM:
 
 ```bash
 # Clone this repo
 git clone <repo-url>
 cd api-discovery-lab
-
-# Create a .env file with your tunnel token
-echo "TUNNEL_TOKEN=eyJhIjo..." > .env
 
 # Start the stack
 docker compose up -d --build

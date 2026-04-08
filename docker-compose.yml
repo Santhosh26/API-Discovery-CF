@@ -10,14 +10,6 @@ services:
       timeout: 5s
       retries: 3
 
-  cloudflared:
-    image: cloudflare/cloudflared:latest
-    command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
-    restart: unless-stopped
-    depends_on:
-      api:
-        condition: service_healthy
-
   traffic-gen:
     build: .
     command: ["node", "scripts/traffic-generator.js"]
